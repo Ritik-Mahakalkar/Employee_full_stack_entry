@@ -8,7 +8,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// MySQL Database Connection
+
 const db = mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -16,7 +16,7 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME,
 });
 
-// Connect to MySQL
+
 db.connect((err) => {
   if (err) {
     console.error("Database connection failed: " + err.stack);
@@ -25,7 +25,7 @@ db.connect((err) => {
   console.log("Connected to MySQL database.");
 });
 
-// Create `employees` Table if Not Exists
+
 db.query(
   `CREATE TABLE IF NOT EXISTS employees (
     employee_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -50,9 +50,7 @@ db.query(
   }
 );
 
-//  API Endpoints
 
-// **Add Employee** (POST /employees)
 app.post("/employees", (req, res) => {
   const {
     name, dob, gender, address, city, state,
@@ -77,7 +75,7 @@ app.post("/employees", (req, res) => {
   );
 });
 
-// **Fetch All Employees** (GET /employees)
+
 app.get("/employees", (req, res) => {
   db.query("SELECT * FROM employees", (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -85,7 +83,7 @@ app.get("/employees", (req, res) => {
   });
 });
 
-//  **Update Employee** (PUT /employees/:id)
+
 app.put("/employees/:id", (req, res) => {
   const { id } = req.params;
   const {
@@ -107,7 +105,7 @@ app.put("/employees/:id", (req, res) => {
     }
   );
 });
-// **Fetch Single Employee by ID** (GET /employees/:id)
+
 app.get("/employees/:id", (req, res) => {
   const { id } = req.params;
 
@@ -119,7 +117,7 @@ app.get("/employees/:id", (req, res) => {
   });
 });
 
-//  **Delete Employee** (DELETE /employees/:id)
+
 app.delete("/employees/:id", (req, res) => {
   const { id } = req.params;
 
@@ -130,6 +128,6 @@ app.delete("/employees/:id", (req, res) => {
   });
 });
 
-// Start Server
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
